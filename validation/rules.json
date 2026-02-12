@@ -1,0 +1,269 @@
+{
+  "version": "2.0",
+  "description": "CEO 보고서 자동 검증 규칙 - PRD-001 v2.0 기반",
+  "last_updated": "2026-02-12",
+  "rules": [
+    {
+      "id": 1,
+      "name": "h1_count",
+      "description": "H1 3개 이하",
+      "prd_section": "2.2",
+      "type": "regex",
+      "pattern": "^# ",
+      "max_count": 3,
+      "severity": "error",
+      "message": "H1 제목이 3개를 초과했습니다. 대주제를 통합하세요."
+    },
+    {
+      "id": 2,
+      "name": "h2_per_h1",
+      "description": "H2는 H1당 3개 이하",
+      "prd_section": "2.2",
+      "type": "structure",
+      "max_per_parent": 3,
+      "severity": "error",
+      "message": "특정 H1 아래 H2가 3개를 초과했습니다. 소주제를 통합하세요."
+    },
+    {
+      "id": 3,
+      "name": "no_first_person",
+      "description": "1인칭 사용 금지",
+      "prd_section": "7.1",
+      "type": "regex",
+      "pattern": "저는|제가|저의",
+      "max_count": 0,
+      "severity": "error",
+      "message": "1인칭(저는, 제가, 저의)이 발견되었습니다. 모두 제거하세요."
+    },
+    {
+      "id": 4,
+      "name": "uri_limit",
+      "description": "우리 3회 이하",
+      "prd_section": "7.1",
+      "type": "regex",
+      "pattern": "우리",
+      "max_count": 3,
+      "severity": "warning",
+      "message": "'우리'가 3회를 초과했습니다. 조직 전체 지칭 외에는 제거하세요."
+    },
+    {
+      "id": 5,
+      "name": "hajiman_limit",
+      "description": "하지만 3회 이하",
+      "prd_section": "7.2",
+      "type": "regex",
+      "pattern": "하지만",
+      "max_count": 3,
+      "severity": "warning",
+      "message": "'하지만'이 3회를 초과했습니다. 과도한 반전을 줄이세요."
+    },
+    {
+      "id": 6,
+      "name": "gyeolguk_limit",
+      "description": "결국 3회 이하 (접속사 2회 + 부사 1회)",
+      "prd_section": "7.2",
+      "type": "regex",
+      "pattern": "결국",
+      "max_count": 3,
+      "severity": "warning",
+      "message": "'결국'이 3회를 초과했습니다. 수렴 강조를 줄이세요."
+    },
+    {
+      "id": 7,
+      "name": "korean_english_parenthesis",
+      "description": "한글(영문) 병기 검출",
+      "prd_section": "6.5",
+      "type": "regex",
+      "pattern": "[가-힣]+\\([A-Za-z]+\\)",
+      "max_count": 0,
+      "severity": "error",
+      "message": "한글(영문) 병기가 발견되었습니다. AI 티를 제거하고 한글 또는 영어 중 하나만 사용하세요."
+    },
+    {
+      "id": 8,
+      "name": "emoji_detection",
+      "description": "이모지 검출",
+      "prd_section": "9",
+      "type": "unicode",
+      "unicode_range": ["U+1F600-U+1F64F", "U+1F300-U+1F5FF", "U+1F680-U+1F6FF", "U+2600-U+26FF"],
+      "max_count": 0,
+      "severity": "error",
+      "message": "이모지가 발견되었습니다. 모두 제거하세요."
+    },
+    {
+      "id": 9,
+      "name": "conclusion_header",
+      "description": "결론/최종 추천 헤더 금지",
+      "prd_section": "9",
+      "type": "regex",
+      "pattern": "^#{1,3}\\s*(결론|최종 추천)",
+      "max_count": 0,
+      "severity": "error",
+      "message": "'결론' 또는 '최종 추천' 헤더가 발견되었습니다. 제거하세요."
+    },
+    {
+      "id": 10,
+      "name": "money_format",
+      "description": "금액 형식: $ 금액 (공백 1칸)",
+      "prd_section": "6.4",
+      "type": "regex",
+      "pattern": "\\$\\s\\d{1,3}(,\\d{3})*",
+      "match_type": "positive",
+      "negative_pattern": "\\$\\d|\\$[^\\s]",
+      "severity": "error",
+      "message": "금액 형식이 잘못되었습니다. '$ 금액' 형식(공백 1칸)을 사용하세요."
+    },
+    {
+      "id": 11,
+      "name": "multiple_bold_per_sentence",
+      "description": "한 문장 볼드 2회 이상 금지",
+      "prd_section": "6.3",
+      "type": "regex",
+      "pattern": "[^.!?\\n]*\\*\\*[^*]+\\*\\*[^.!?\\n]*\\*\\*[^*]+\\*\\*",
+      "max_count": 0,
+      "severity": "error",
+      "message": "한 문장에 볼드가 2회 이상 사용되었습니다. 스캔 포인트를 1개로 줄이세요."
+    },
+    {
+      "id": 12,
+      "name": "transition_phrase",
+      "description": "다음으로/이어서 금지",
+      "prd_section": "9",
+      "type": "regex",
+      "pattern": "다음으로|이어서",
+      "max_count": 0,
+      "severity": "error",
+      "message": "'다음으로' 또는 '이어서' 전환 문구가 발견되었습니다. 제거하세요."
+    },
+    {
+      "id": 13,
+      "name": "formal_conjunction",
+      "description": "문어체 접속사 금지",
+      "prd_section": "7.2",
+      "type": "regex",
+      "pattern": "그러나|그렇지만|그럼에도 불구하고",
+      "max_count": 0,
+      "severity": "error",
+      "message": "문어체 접속사가 발견되었습니다. '하지만'을 사용하세요."
+    },
+    {
+      "id": 14,
+      "name": "closing_greeting",
+      "description": "감사합니다 금지",
+      "prd_section": "9",
+      "type": "regex",
+      "pattern": "감사합니다",
+      "max_count": 0,
+      "severity": "error",
+      "message": "'감사합니다' 인사말이 발견되었습니다. 제거하세요."
+    },
+    {
+      "id": 15,
+      "name": "table_size",
+      "description": "테이블 최대 3행 x 3열",
+      "prd_section": "6.2",
+      "type": "structure",
+      "max_rows": 3,
+      "max_cols": 3,
+      "severity": "warning",
+      "message": "테이블이 3행 또는 3열을 초과했습니다. 핵심만 남기세요."
+    },
+    {
+      "id": 16,
+      "name": "bullet_formal_ending",
+      "description": "불릿 내 합쇼체 금지",
+      "prd_section": "6.1",
+      "type": "regex",
+      "pattern": "^[\\s\\-\\*]+.*?(습니다|됩니다|입니다)\\s*$",
+      "max_count": 0,
+      "severity": "error",
+      "message": "불릿 항목에 합쇼체가 사용되었습니다. 명사형/해체/키워드 형식을 사용하세요."
+    },
+    {
+      "id": 17,
+      "name": "table_of_contents",
+      "description": "목차/ToC 금지 (A4 3매 이하)",
+      "prd_section": "9",
+      "type": "regex",
+      "pattern": "목차|Table of Contents|TOC",
+      "max_count": 0,
+      "severity": "error",
+      "message": "목차가 발견되었습니다. A4 3-5매 문서에는 불필요합니다."
+    },
+    {
+      "id": 18,
+      "name": "damyeon_limit",
+      "description": "다만 1회 이하",
+      "prd_section": "7.2",
+      "type": "regex",
+      "pattern": "다만",
+      "max_count": 1,
+      "severity": "warning",
+      "message": "'다만'이 1회를 초과했습니다. 불확실성 완충을 줄이세요."
+    },
+    {
+      "id": 19,
+      "name": "pros_cons_table",
+      "description": "Pros/Cons 테이블 금지",
+      "prd_section": "9",
+      "type": "regex",
+      "pattern": "(Pros|Cons|장점|단점).*\\|",
+      "max_count": 0,
+      "severity": "error",
+      "message": "Pros/Cons 테이블이 발견되었습니다. 서술형으로 변경하세요."
+    },
+    {
+      "id": 20,
+      "name": "scoring_system",
+      "description": "점수/별점 금지",
+      "prd_section": "9",
+      "type": "regex",
+      "pattern": "[0-9]+점|★|⭐|[0-9]+\\/[0-9]+",
+      "max_count": 0,
+      "severity": "error",
+      "message": "점수/별점이 발견되었습니다. 제거하세요."
+    },
+    {
+      "id": 21,
+      "name": "blank_line_rhythm",
+      "description": "여백 존재 확인 (3-5문장마다 단일 여백)",
+      "prd_section": "13",
+      "type": "structure",
+      "check": "blank_line_frequency",
+      "severity": "warning",
+      "message": "문단 간 여백이 부족합니다. 3-5문장마다 빈 줄을 추가하세요."
+    },
+    {
+      "id": 22,
+      "name": "meta_info",
+      "description": "메타 정보 존재 (제목 + 1줄 요약)",
+      "prd_section": "2.5",
+      "type": "structure",
+      "check": "first_lines",
+      "severity": "warning",
+      "message": "문서 상단에 제목과 1줄 요약이 누락되었습니다."
+    }
+  ],
+  "validation_phases": {
+    "phase_1": {
+      "name": "자동 검증",
+      "rules": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22],
+      "description": "정규식 및 구조 분석으로 즉시 검증 가능한 항목"
+    },
+    "phase_2": {
+      "name": "수사 검증",
+      "description": "의미 분석 필요 (AI 또는 인간 리뷰)",
+      "manual": true
+    },
+    "phase_3": {
+      "name": "포맷 검증",
+      "description": "시각적 확인 필요",
+      "manual": true
+    },
+    "phase_4": {
+      "name": "어투 검증",
+      "description": "전체 읽기 후 톤 판정",
+      "manual": true
+    }
+  }
+}

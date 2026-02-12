@@ -1,0 +1,12 @@
+# OMC internal state
+.omc/
+
+# BKIT internal state
+docs/.bkit-memory.json
+docs/.pdca-snapshots/
+docs/.pdca-status.json
+
+# OS files
+nul
+Thumbs.db
+.DS_Store
