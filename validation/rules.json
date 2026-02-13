@@ -72,7 +72,7 @@
       "id": 7,
       "name": "korean_english_parenthesis",
       "description": "한글(영문) 병기 검출",
-      "prd_section": "6.5",
+      "prd_section": "6.6",
       "type": "regex",
       "pattern": "[가-힣]+\\([A-Za-z]+\\)",
       "max_count": 0,
